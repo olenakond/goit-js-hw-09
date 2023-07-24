@@ -24,6 +24,12 @@ function onClickBtn(event) {
   event.preventDefault();
 
   function createPromises(delay, step, amount) {
+    
+    if (delay < 0 || step < 0 || amount <= 0) {
+      Notiflix.Notify.failure('Please enter valid numbers!');
+      return
+    }
+    
     let delayOfPromise = delay;
     for (let i = 1; i <= amount; i += 1) {
       createPromise(i, delayOfPromise)

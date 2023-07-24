@@ -3,6 +3,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 const startBtnElement = document.querySelector('button[data-start]');
+const resetBtnElement = document.querySelector('button[data-reset]');
+const inputElement = document.querySelector('#datetime-picker');
 const daysElement = document.querySelector('span[data-days]');
 const hoursElement = document.querySelector('span[data-hours]');
 const minutesElement = document.querySelector('span[data-minutes]');
@@ -11,6 +13,7 @@ const secondsElement = document.querySelector('span[data-seconds]');
 let selectedDate = null;
 
 startBtnElement.disabled = true;
+resetBtnElement.disabled = true;
 
 Notiflix.Notify.init({
   position: 'center-top',
@@ -54,6 +57,9 @@ startBtnElement.addEventListener('click', onStartBtnClick);
 
 function onStartBtnClick() {
   startBtnElement.disabled = true;
+  inputElement.disabled = true;
+  resetBtnElement.disabled = false;
+
   const timerStartValue = convertMs(selectedDate - Date.now());
   daysElement.textContent = addLeadingZero(timerStartValue.days);
   hoursElement.textContent = addLeadingZero(timerStartValue.hours);
@@ -73,6 +79,21 @@ function onStartBtnClick() {
       secondsElement.textContent === '00'
     ) {
       clearInterval(timerId);
+      inputElement.disabled = false;
     }
   }, 1000);
+
+  resetBtnElement.addEventListener('click', onResetClick);
+
+  function onResetClick() {
+    clearInterval(timerId);
+
+    daysElement.textContent = '00';
+    hoursElement.textContent = '00';
+    minutesElement.textContent = '00';
+    secondsElement.textContent = '00';
+
+    inputElement.disabled = false;
+    resetBtnElement.disabled = true;
+  }
 }
